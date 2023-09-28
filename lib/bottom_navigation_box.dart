@@ -13,7 +13,7 @@ class _BottomNavigationBarBoxState extends State<BottomNavigationBox> {
   int _selectedIndex = 0;
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.normal);
-  static const List<Widget> _widgetOptions = <Widget> [
+  static const List<Widget> _widgetOptions = <Widget>[
     Text(
       'Index 0: everything',
       style: optionStyle,
@@ -23,11 +23,11 @@ class _BottomNavigationBarBoxState extends State<BottomNavigationBox> {
       style: optionStyle,
     ),
     Text(
-      'Index 2: Tag/Category',
+      'Index 2: Add',
       style: optionStyle,
     ),
     Text(
-      'Index 3: Log',
+      'Index 3: Tag/Category',
       style: optionStyle,
     ),
     Text(
@@ -35,6 +35,7 @@ class _BottomNavigationBarBoxState extends State<BottomNavigationBox> {
       style: optionStyle,
     ),
   ];
+
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -54,33 +55,35 @@ class _BottomNavigationBarBoxState extends State<BottomNavigationBox> {
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.diamond),
-            label: 'Everything',
+            label: '',
             backgroundColor: Colors.blue,
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.local_grocery_store),
-            label: 'Expire',
+            label: '',
             backgroundColor: Colors.green,
           ),
           BottomNavigationBarItem(
+            icon: Icon(Icons.add),
+            label: '',
+            backgroundColor: Colors.orange,
+          ),
+          BottomNavigationBarItem(
             icon: Icon(Icons.loyalty),
-            label: 'Category',
+            label: '',
             backgroundColor: Colors.pinkAccent,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.history),
-            label: 'Log',
-            backgroundColor: Colors.cyan,
-          ),
-          BottomNavigationBarItem(
             icon: Icon(Icons.settings),
-            label: 'Setting',
+            label: '',
             backgroundColor: Colors.teal,
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.white,
+        selectedItemColor: Colors.indigoAccent,
         onTap: _onItemTapped,
+        selectedLabelStyle: const TextStyle(fontSize: 0),
+        unselectedLabelStyle: const TextStyle(fontSize: 0),
       ),
     );
   }
