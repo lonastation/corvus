@@ -58,7 +58,6 @@ name varchar(128),
 category_id bigint,
 location varchar(128), 
 quantity int, 
-star int, 
 rate_of_loss int,
 remark varchar(255), 
 price decimal,
@@ -116,7 +115,7 @@ tag-id bigint,
 5. log
 
 ```sql
-create table peko_log (
+create table corvus_log (
 id bigint, 
 action varchar(128),
 module varchar(128),
@@ -124,6 +123,19 @@ act_time date,
 act_result varchar(255),
 request-data text,
 response-data text
+)
+```
+
+6. file
+
+```sql
+create table thing_file (
+id int,
+thing_id int,
+file_name text,
+file_path text,
+file_size int,
+file_index int
 )
 ```
 
