@@ -51,22 +51,22 @@ class _BottomNavigationBarBoxState extends State<BottomNavigationBox> {
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(
-              Icons.diamond_outlined,
+              Icons.whatshot_outlined,
             ),
             activeIcon: Icon(
-              Icons.diamond,
+              Icons.whatshot,
             ),
             label: '库存',
             // backgroundColor: Colors.blue,
           ),
           BottomNavigationBarItem(
             icon: Icon(
-              Icons.local_grocery_store_outlined,
+              Icons.catching_pokemon_outlined,
             ),
             activeIcon: Icon(
-              Icons.local_grocery_store,
+              Icons.catching_pokemon,
             ),
-            label: '补货',
+            label: '上货',
             // backgroundColor: Colors.green,
           ),
           BottomNavigationBarItem(
@@ -81,10 +81,10 @@ class _BottomNavigationBarBoxState extends State<BottomNavigationBox> {
           ),
           BottomNavigationBarItem(
             icon: Icon(
-              Icons.settings_outlined,
+              Icons.eco_outlined,
             ),
             activeIcon: Icon(
-              Icons.settings
+              Icons.eco
             ),
             label: '设置',
             // backgroundColor: Colors.teal,
@@ -95,7 +95,9 @@ class _BottomNavigationBarBoxState extends State<BottomNavigationBox> {
         unselectedItemColor: Colors.grey,
         onTap: _onItemTapped,
         selectedLabelStyle: const TextStyle(fontSize: 14),
-        unselectedLabelStyle: const TextStyle(fontSize: 0),
+        showSelectedLabels: true,
+        showUnselectedLabels: false,
+        type: BottomNavigationBarType.fixed,
       ),
     );
   }
