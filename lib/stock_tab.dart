@@ -1,45 +1,57 @@
-import 'dart:async';
+import 'package:flutter/material.dart';
 
-import 'package:flutter/widgets.dart';
-import 'package:path/path.dart';
-import 'package:sqflite/sqflite.dart';
+import 'add_thing_tab.dart';
 
+class StockTab extends StatefulWidget {
+  const StockTab({super.key});
 
+  @override
+  State<StatefulWidget> createState() {
+    return _StockTabState();
+  }
+}
+class _StockTabState extends State<StockTab> {
 
-class Thing {
-  final int id;
-  final int categoryId;
-  final int thingStatus;
-  final String code;
-  final String name;
-  final String location;
-  final int quantity;
-  final double rateOfLoss;
-  final String remark;
-  final double price;
-  final DateTime purchaseDate;
-  final String purchaseChannel;
-  final String deleteReason;
-  final DateTime deleteTime;
-  final DateTime createTime;
-  final DateTime lastUpdateTime;
-
-  const Thing({
-    required this.id,
-    required this.categoryId,
-    required this.thingStatus,
-    required this.code,
-    required this.name,
-    required this.location,
-    required this.quantity,
-    required this.rateOfLoss,
-    required this.remark,
-    required this.price,
-    required this.purchaseDate,
-    required this.purchaseChannel,
-    required this.deleteReason,
-    required this.deleteTime,
-    required this.createTime,
-    required this.lastUpdateTime,
-  });
+  @override
+  void initState() {
+    super.initState();
+  }
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Everything is here'),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const AddThingTab(),
+              ));
+        },
+        foregroundColor: Colors.blue,
+        child: const Icon(
+          Icons.add
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      body: ListView(
+        children: const <Widget>[
+          ListTile(
+            leading: Icon(Icons.map),
+            title: Text('Map'),
+          ),
+          ListTile(
+            leading: Icon(Icons.photo_album),
+            title: Text('Album'),
+          ),
+          ListTile(
+            leading: Icon(Icons.phone),
+            title: Text('Phone'),
+          ),
+        ],
+      ),
+    );
+  }
 }

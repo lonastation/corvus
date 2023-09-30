@@ -1,3 +1,7 @@
+import 'package:corvus/expire_tab.dart';
+import 'package:corvus/setting_tab.dart';
+import 'package:corvus/stock_tab.dart';
+import 'package:corvus/tag_tab.dart';
 import 'package:flutter/material.dart';
 
 class BottomNavigationBox extends StatefulWidget {
@@ -11,25 +15,11 @@ class BottomNavigationBox extends StatefulWidget {
 
 class _BottomNavigationBarBoxState extends State<BottomNavigationBox> {
   int _selectedIndex = 0;
-  static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.normal);
-  static const List<Widget> _widgetOptions = <Widget>[
-    Text(
-      'Index 0: everything',
-      style: optionStyle,
-    ),
-    Text(
-      'Index 1: expire',
-      style: optionStyle,
-    ),
-    Text(
-      'Index 2: Tag/Category',
-      style: optionStyle,
-    ),
-    Text(
-      'Index 3: Setting',
-      style: optionStyle,
-    ),
+  final _widgetOptions = <Widget> [
+    const StockTab(),
+    const ExpireTab(),
+    const TagTab(),
+    const SettingTab(),
   ];
 
   void _onItemTapped(int index) {
@@ -41,12 +31,7 @@ class _BottomNavigationBarBoxState extends State<BottomNavigationBox> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Everything is here'),
-      ),
-      body: Center(
-        child: _widgetOptions.elementAt(_selectedIndex),
-      ),
+      body: _widgetOptions[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
@@ -83,9 +68,7 @@ class _BottomNavigationBarBoxState extends State<BottomNavigationBox> {
             icon: Icon(
               Icons.eco_outlined,
             ),
-            activeIcon: Icon(
-              Icons.eco
-            ),
+            activeIcon: Icon(Icons.eco),
             label: '设置',
             // backgroundColor: Colors.teal,
           ),
