@@ -52,21 +52,21 @@ setting: export/import/about us;
 
 ```sql
 create table thing (
-id bigint, 
-code varchar(255),
-name varchar(128), 
-location varchar(128), 
-quantity int, 
+id INTEGER PRIMARY KEY AUTOINCREMENT not null, 
+code text,
+name text not null, 
+location text, 
+quantity integer default 1, 
 rate_of_loss real,
-remark varchar(255), 
-price decimal,
-purchase_time date, 
-purchase_channel varchar(128), 
-status int,
-delete_reason varchar(255),
-delete_time date, 
-create_time date, 
-last_update_time date
+note TEXT, 
+price real,
+purchase_time text, 
+purchase_channel text, 
+status integer,
+delete_reason text,
+delete_time text, 
+create_time text, 
+last_update_time text
 )
 ```
 
@@ -74,10 +74,10 @@ last_update_time date
 
 ```sql
 create table expire_config (
-id bigint, 
-product_id bigint, 
-expire_days int, 
-expire_time date
+id INTEGER PRIMARY KEY AUTOINCREMENT not null,
+thing_id integer not null, 
+expire_days integer not null, 
+expire_time text not null
 )
 ```
 
@@ -85,9 +85,9 @@ expire_time date
 
 ```sql
 create table tag (
-id bigint, 
-name varchar(128), 
-type_id int
+id integer PRIMARY KEY AUTOINCREMENT NOT NULL, 
+name TEXT not null, 
+type_id integer not null
 )
 ```
 
@@ -95,8 +95,8 @@ type_id int
 
 ```sql
 create table tag_type (
-id int,
-name text,
+id integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+name text not null,
 icon_name text,
 icon_color text
 )
@@ -106,9 +106,9 @@ icon_color text
 
 ```sql
 create table thing_tag (
-id bigint, 
-thing-id bigint, 
-tag-id bigint, 
+id integer PRIMARY KEY AUTOINCREMENT NOT NULL, 
+thing_id integer not null, 
+tag_id integer not null
 )
 ```
 
@@ -116,13 +116,13 @@ tag-id bigint,
 
 ```sql
 create table act_log (
-id bigint, 
-action varchar(128),
-module varchar(128),
-act_time date,
-act_result varchar(255),
-request-data text,
-response-data text
+id integer PRIMARY KEY AUTOINCREMENT NOT NULL, 
+activity text not null,
+module text not null,
+act_time text,
+act_result text,
+request_data text,
+response_data text
 )
 ```
 
@@ -136,12 +136,12 @@ response: failure/success
 
 ```sql
 create table thing_file (
-id int,
-thing_id int,
-file_name text,
-file_path text,
-file_size int,
-file_index int
+id integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+thing_id integer nt null,
+file_name text not null,
+file_path text not null,
+file_size integer,
+file_index integer
 )
 ```
 
