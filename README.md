@@ -55,10 +55,9 @@ create table thing (
 id bigint, 
 code varchar(255),
 name varchar(128), 
-category_id bigint,
 location varchar(128), 
 quantity int, 
-rate_of_loss int,
+rate_of_loss real,
 remark varchar(255), 
 price decimal,
 purchase_time date, 
@@ -71,24 +70,14 @@ last_update_time date
 )
 ```
 
-2. deadline
+2. expire_config
 
 ```sql
-create table deadline (
+create table expire_config (
 id bigint, 
 product_id bigint, 
 expire_days int, 
 expire_time date
-)
-```
-
-2. category
-
-```sql
-create table category (
-id bigint, 
-name varchar(128), 
-index int
 )
 ```
 
@@ -98,11 +87,22 @@ index int
 create table tag (
 id bigint, 
 name varchar(128), 
-color varchar(30)
+type_id int
 )
 ```
 
-4. thing-tag-mapping
+4. tag_type
+
+```sql
+create table tag_type (
+id int,
+name text,
+icon_name text,
+icon_color text
+)
+```
+
+5. thing-tag-mapping
 
 ```sql
 create table thing_tag (
@@ -112,10 +112,10 @@ tag-id bigint,
 )
 ```
 
-5. log
+6. log
 
 ```sql
-create table corvus_log (
+create table act_log (
 id bigint, 
 action varchar(128),
 module varchar(128),
@@ -126,7 +126,13 @@ response-data text
 )
 ```
 
-6. file
+action: add/update/delete/import/export
+
+module: thing/category/tag/excel
+
+response: failure/success
+
+7. file
 
 ```sql
 create table thing_file (
@@ -139,8 +145,4 @@ file_index int
 )
 ```
 
-action: add/update/batch update/delete/import/export
 
-module: thing/category/tag/excel
-
-response: failure/success
