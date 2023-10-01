@@ -145,4 +145,20 @@ file_index integer
 )
 ```
 
+# plan
 
+1. UX-1
+
+增删改查thing， thing只包含名称，位置；
+
+增删改查 tag type，tag type 只包含名称；
+
+2. UX-2
+
+增删改查 tag, tag只包含名称；
+
+thing 增加 tag；
+
+3. UX-3
+
+先把前俩弄出来看看实力 

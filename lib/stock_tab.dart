@@ -57,7 +57,7 @@ class _StockTabState extends State<StockTab> {
         children: <Widget>[
           ListTile(
             title: const Text(
-              '小豆泥玩偶',
+              '小豆泥',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             trailing: IconButton(
@@ -69,7 +69,7 @@ class _StockTabState extends State<StockTab> {
           ),
           ListTile(
             title: const Text(
-              '北海巨妖耳机',
+              '北海巨妖',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             trailing: IconButton(
