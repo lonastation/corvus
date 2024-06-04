@@ -1,6 +1,59 @@
 # story
 
-1. 应对失忆，非标准化名称，多角度记忆；
-2. 消耗品的周期性采购提醒，过期提醒；
-3. 图片；
-4. 语音录入，语音检索；
+local storage for everything
+
+## clothes
+
+based on photo, classification.
+
+### main view
+
+fixed filter chips.
+
+card view.
+
+### add view
+
+photo, type, name, description.
+
+### update view
+
+delete, update photo, update name.
+
+## tools
+
+based on name, location, photo.
+
+### main view
+
+card view.
+
+search everything.
+
+### add view
+
+photo, location, name, description.
+
+### update view
+
+delete, update photo, update name, update location.
+
+## consumables
+
+based on name, quantity, photo, location.
+
+### main view
+
+card view.
+
+group by name.
+
+search name.
+
+### add view
+
+photo, name, location, description.
+
+### update view
+
+delete, update photo, update name, update location.
