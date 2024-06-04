@@ -27,7 +27,7 @@ class ItemDetailsViewModel(
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private val itemId: Int = checkNotNull(savedStateHandle[ItemDetailsDestination.itemIdArg])
+    private val itemId: Int = checkNotNull(savedStateHandle[ItemDetailsDestination.ITEM_ID_ARG])
 
     companion object {
         private const val TIMEOUT_MILLIS = 5_000L
