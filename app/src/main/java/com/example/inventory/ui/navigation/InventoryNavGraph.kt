@@ -23,6 +23,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.example.inventory.ui.cloth.ClothScreen
 import com.example.inventory.ui.home.HomeDestination
 import com.example.inventory.ui.home.HomeScreen
 import com.example.inventory.ui.item.ItemDetailsDestination
@@ -31,6 +32,8 @@ import com.example.inventory.ui.item.ItemEditDestination
 import com.example.inventory.ui.item.ItemEditScreen
 import com.example.inventory.ui.item.ItemEntryDestination
 import com.example.inventory.ui.item.ItemEntryScreen
+import com.example.inventory.ui.supply.SupplyScreen
+import com.example.inventory.ui.tool.ToolScreen
 
 /**
  * Provides Navigation graph for the application.
@@ -42,9 +45,19 @@ fun InventoryNavHost(
 ) {
     NavHost(
         navController = navController,
-        startDestination = HomeDestination.route,
+        startDestination = Screens.Clothes.route,
         modifier = modifier
     ) {
+        composable(Screens.Clothes.route) {
+            ClothScreen(navController)
+        }
+        composable(Screens.Tools.route) {
+            ToolScreen(navController)
+        }
+        composable(Screens.Supplies.route) {
+            SupplyScreen(navController)
+        }
+
         composable(route = HomeDestination.route) {
             HomeScreen(
                 navigateToItemEntry = { navController.navigate(ItemEntryDestination.route) },
