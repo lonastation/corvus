@@ -49,6 +49,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.inventory.R.string
 import com.example.inventory.ui.navigation.InventoryNavHost
+import com.example.inventory.ui.navigation.Screens
 
 /**
  * Top level composable that represents screens for the application.
@@ -113,19 +114,19 @@ data class BottomNavigationItem(
     fun bottomNavigationItems(): List<BottomNavigationItem> {
         return listOf(
             BottomNavigationItem(
-                label = "clothes",
-                icon = Icons.Filled.ShoppingCart,
-                route = "clothes"
+                label = Screens.Clothes.label,
+                icon = Screens.Clothes.icon,
+                route = Screens.Clothes.route
             ),
             BottomNavigationItem(
-                label = "tools",
-                icon = Icons.Filled.Build,
-                route = "tools"
+                label = Screens.Tools.label,
+                icon = Screens.Tools.icon,
+                route = Screens.Tools.route
             ),
             BottomNavigationItem(
-                label = "supplies",
-                icon = Icons.Filled.DateRange,
-                route = "supplies"
+                label = Screens.Supplies.label,
+                icon = Screens.Supplies.icon,
+                route = Screens.Supplies.route
             )
         )
     }
