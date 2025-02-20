@@ -21,13 +21,16 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.linn.inventory.data.ItemsRepository
+import kotlinx.coroutines.launch
 
 /**
  * ViewModel to retrieve and update an item from the [ItemsRepository]'s data source.
  */
 class ItemEditViewModel(
     savedStateHandle: SavedStateHandle,
+    private val itemsRepository: ItemsRepository
 ) : ViewModel() {
 
     /**
@@ -38,9 +41,30 @@ class ItemEditViewModel(
 
     private val itemId: Int = checkNotNull(savedStateHandle[ItemEditDestination.itemIdArg])
 
+    init {
+        viewModelScope.launch {
+            itemsRepository.getItemStream(itemId).collect{
+                        item ->
+                    item?.let {
+                        itemUiState = itemUiState.copy(
+                            itemDetails = it.toItemDetails()
+                        )
+                    }
+                }
+        }
+    }
+
     private fun validateInput(uiState: ItemDetails = itemUiState.itemDetails): Boolean {
         return with(uiState) {
             name.isNotBlank() && color.isNotBlank() && quantity.isNotBlank()
         }
+    }
+
+    fun updateItemUiState(itemDetails: ItemDetails) {
+        itemUiState = ItemUiState(itemDetails = itemDetails, isEntryValid = validateInput())
+    }
+
+    suspend fun updateItem() {
+        itemsRepository.updateItem(itemUiState.itemDetails.toItem())
     }
 }
