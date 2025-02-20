@@ -28,6 +28,7 @@ data class Item(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     val name: String,
-    val price: Double,
-    val quantity: Int
+    val color: String,
+    val quantity: Int,
+    val content: String
 )

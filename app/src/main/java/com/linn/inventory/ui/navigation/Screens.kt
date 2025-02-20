@@ -1,13 +1,11 @@
 package com.linn.inventory.ui.navigation
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Build
-import androidx.compose.material.icons.filled.DateRange
-import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material.icons.filled.CatchingPokemon
+import androidx.compose.material.icons.outlined.TravelExplore
 import androidx.compose.ui.graphics.vector.ImageVector
 
 sealed class Screens(val route: String, val label:String , val icon: ImageVector) {
-    data object Clothes: Screens("clothes", "clothes", Icons.Filled.ShoppingCart)
-    data object Tools: Screens("tools", "tools", Icons.Filled.Build)
-    data object Supplies: Screens("supplies", "supplies", Icons.Filled.DateRange)
+    data object Home: Screens("Home", "What's new", Icons.Default.CatchingPokemon)
+    data object Nest: Screens("Nest", "Nest", Icons.Outlined.TravelExplore)
 }

@@ -22,7 +22,6 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.linn.inventory.data.Item
 import com.linn.inventory.data.ItemsRepository
-import java.text.NumberFormat
 
 /**
  * ViewModel to validate and insert items in the Room database.
@@ -52,7 +51,7 @@ class ItemEntryViewModel(private val itemsRepository: ItemsRepository) : ViewMod
 
     private fun validateInput(uiState: ItemDetails = itemUiState.itemDetails): Boolean {
         return with(uiState) {
-            name.isNotBlank() && price.isNotBlank() && quantity.isNotBlank()
+            name.isNotBlank() && color.isNotBlank() && quantity.isNotBlank()
         }
     }
 }
@@ -68,40 +67,15 @@ data class ItemUiState(
 data class ItemDetails(
     val id: Int = 0,
     val name: String = "",
-    val price: String = "",
+    val color: String = "",
     val quantity: String = "",
+    val content: String = ""
 )
 
-/**
- * Extension function to convert [ItemDetails] to [Item]. If the value of [ItemDetails.price] is
- * not a valid [Double], then the price will be set to 0.0. Similarly if the value of
- * [ItemDetails.quantity] is not a valid [Int], then the quantity will be set to 0
- */
 fun ItemDetails.toItem(): Item = Item(
     id = id,
     name = name,
-    price = price.toDoubleOrNull() ?: 0.0,
-    quantity = quantity.toIntOrNull() ?: 0
-)
-
-fun Item.formatedPrice(): String {
-    return NumberFormat.getCurrencyInstance().format(price)
-}
-
-/**
- * Extension function to convert [Item] to [ItemUiState]
- */
-fun Item.toItemUiState(isEntryValid: Boolean = false): ItemUiState = ItemUiState(
-    itemDetails = this.toItemDetails(),
-    isEntryValid = isEntryValid
-)
-
-/**
- * Extension function to convert [Item] to [ItemDetails]
- */
-fun Item.toItemDetails(): ItemDetails = ItemDetails(
-    id = id,
-    name = name,
-    price = price.toString(),
-    quantity = quantity.toString()
+    color = color,
+    quantity = quantity.toIntOrNull() ?: 0,
+    content = content
 )

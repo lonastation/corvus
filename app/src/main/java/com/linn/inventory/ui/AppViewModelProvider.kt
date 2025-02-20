@@ -27,6 +27,7 @@ import com.linn.inventory.ui.home.HomeViewModel
 import com.linn.inventory.ui.item.ItemDetailsViewModel
 import com.linn.inventory.ui.item.ItemEditViewModel
 import com.linn.inventory.ui.item.ItemEntryViewModel
+import com.linn.inventory.ui.nest.NestViewModel
 
 /**
  * Provides Factory to create instance of ViewModel for the entire Inventory app
@@ -54,6 +55,10 @@ object AppViewModelProvider {
         // Initializer for HomeViewModel
         initializer {
             HomeViewModel(inventoryApplication().container.itemsRepository)
+        }
+
+        initializer {
+            NestViewModel(inventoryApplication().container.itemsRepository)
         }
     }
 }

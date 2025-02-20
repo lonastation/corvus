@@ -44,7 +44,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.linn.inventory.R
 import com.linn.inventory.ui.navigation.InventoryNavHost
 import com.linn.inventory.ui.navigation.Screens
 
@@ -111,19 +110,14 @@ data class BottomNavigationItem(
     fun bottomNavigationItems(): List<BottomNavigationItem> {
         return listOf(
             BottomNavigationItem(
-                label = Screens.Clothes.label,
-                icon = Screens.Clothes.icon,
-                route = Screens.Clothes.route
+                label = Screens.Home.label,
+                icon = Screens.Home.icon,
+                route = Screens.Home.route
             ),
             BottomNavigationItem(
-                label = Screens.Tools.label,
-                icon = Screens.Tools.icon,
-                route = Screens.Tools.route
-            ),
-            BottomNavigationItem(
-                label = Screens.Supplies.label,
-                icon = Screens.Supplies.icon,
-                route = Screens.Supplies.route
+                label = Screens.Nest.label,
+                icon = Screens.Nest.icon,
+                route = Screens.Nest.route
             )
         )
     }

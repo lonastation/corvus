@@ -23,8 +23,6 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.linn.inventory.ui.cloth.ClothScreen
-import com.linn.inventory.ui.home.HomeDestination
 import com.linn.inventory.ui.home.HomeScreen
 import com.linn.inventory.ui.item.ItemDetailsDestination
 import com.linn.inventory.ui.item.ItemDetailsScreen
@@ -32,8 +30,7 @@ import com.linn.inventory.ui.item.ItemEditDestination
 import com.linn.inventory.ui.item.ItemEditScreen
 import com.linn.inventory.ui.item.ItemEntryDestination
 import com.linn.inventory.ui.item.ItemEntryScreen
-import com.linn.inventory.ui.supply.SupplyScreen
-import com.linn.inventory.ui.tool.ToolScreen
+import com.linn.inventory.ui.nest.NestScreen
 
 /**
  * Provides Navigation graph for the application.
@@ -45,33 +42,28 @@ fun InventoryNavHost(
 ) {
     NavHost(
         navController = navController,
-        startDestination = Screens.Clothes.route,
+        startDestination = Screens.Home.route,
         modifier = modifier
     ) {
-        composable(Screens.Clothes.route) {
-            ClothScreen(navController)
+        composable(Screens.Home.route) {
+            HomeScreen()
         }
-        composable(Screens.Tools.route) {
-            ToolScreen(navController)
-        }
-        composable(Screens.Supplies.route) {
-            SupplyScreen(navController)
-        }
-
-        composable(route = HomeDestination.route) {
-            HomeScreen(
+        composable(Screens.Nest.route) {
+            NestScreen(
                 navigateToItemEntry = { navController.navigate(ItemEntryDestination.route) },
                 navigateToItemUpdate = {
                     navController.navigate("${ItemDetailsDestination.route}/${it}")
                 }
             )
         }
+
         composable(route = ItemEntryDestination.route) {
             ItemEntryScreen(
                 navigateBack = { navController.popBackStack() },
                 onNavigateUp = { navController.navigateUp() }
             )
         }
+
         composable(
             route = ItemDetailsDestination.routeWithArgs,
             arguments = listOf(navArgument(ItemDetailsDestination.ITEM_ID_ARG) {
