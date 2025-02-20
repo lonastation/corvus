@@ -17,12 +17,14 @@
 package com.linn.inventory.ui.item
 
 import androidx.annotation.StringRes
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -45,7 +47,10 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -57,6 +62,8 @@ import com.linn.inventory.ui.AppViewModelProvider
 import com.linn.inventory.ui.navigation.NavigationDestination
 import com.linn.inventory.ui.theme.InventoryTheme
 import kotlinx.coroutines.launch
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 
 object ItemDetailsDestination : NavigationDestination {
     override val route = "item_details"
@@ -164,6 +171,28 @@ fun ItemDetails(
                 dimensionResource(id = R.dimen.padding_medium)
             )
         ) {
+            if (item.photoPath.isBlank()) {
+                Image(
+                    painter = painterResource(id = R.drawable.picture1),
+                    contentDescription = stringResource(R.string.no_image_available),
+                    modifier = Modifier
+                        .size(dimensionResource(id = R.dimen.image_size))
+                        .padding(dimensionResource(id = R.dimen.padding_small))
+                )
+            } else {
+                AsyncImage(
+                    model = ImageRequest.Builder(LocalContext.current)
+                        .data(item.photoPath)
+                        .crossfade(true)
+                        .build(),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(dimensionResource(id = R.dimen.image_size))
+                        .padding(dimensionResource(id = R.dimen.padding_small)),
+                    contentScale = ContentScale.Crop
+                )
+            }
+            
             ItemDetailsRow(
                 labelResID = R.string.item,
                 itemDetail = item.name,

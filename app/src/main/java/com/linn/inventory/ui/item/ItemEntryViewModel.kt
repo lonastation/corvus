@@ -69,7 +69,8 @@ data class ItemDetails(
     val name: String = "",
     val color: String = "",
     val quantity: String = "",
-    val content: String = ""
+    val content: String = "",
+    val photoPath: String = ""
 )
 
 fun ItemDetails.toItem(): Item = Item(
@@ -77,5 +78,6 @@ fun ItemDetails.toItem(): Item = Item(
     name = name,
     color = color,
     quantity = quantity.toIntOrNull() ?: 1,
-    content = content
+    content = content,
+    photoPath = photoPath
 )

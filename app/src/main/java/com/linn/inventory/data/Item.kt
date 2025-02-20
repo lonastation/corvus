@@ -30,5 +30,6 @@ data class Item(
     val name: String,
     val color: String,
     val quantity: Int,
-    val content: String
+    val content: String,
+    val photoPath: String
 )

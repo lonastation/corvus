@@ -16,16 +16,21 @@
 
 package com.linn.inventory.ui.item
 
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
@@ -33,11 +38,16 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.linn.inventory.InventoryTopAppBar
 import com.linn.inventory.R
 import com.linn.inventory.ui.AppViewModelProvider
@@ -121,10 +131,55 @@ fun ItemInputForm(
     onValueChange: (ItemDetails) -> Unit = {},
     enabled: Boolean = true
 ) {
+    val context = LocalContext.current
+    val photoPickerLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        uri?.let {
+            onValueChange(itemDetails.copy(photoPath = it.toString()))
+        }
+    }
+
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.padding_medium))
     ) {
+        if (itemDetails.photoPath.isBlank()) {
+            OutlinedCard(
+                onClick = { photoPickerLauncher.launch("image/*") },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(dimensionResource(id = R.dimen.padding_small))
+            ) {
+                Text(
+                    text = stringResource(R.string.add_photo),
+                    modifier = Modifier
+                        .padding(dimensionResource(id = R.dimen.padding_medium))
+                        .fillMaxWidth(),
+                    textAlign = TextAlign.Center
+                )
+            }
+        } else {
+            OutlinedCard(
+                onClick = { photoPickerLauncher.launch("image/*") },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(dimensionResource(id = R.dimen.padding_small))
+            ) {
+                AsyncImage(
+                    model = ImageRequest.Builder(context)
+                        .data(itemDetails.photoPath)
+                        .crossfade(true)
+                        .build(),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(dimensionResource(id = R.dimen.image_size))
+                        .padding(dimensionResource(id = R.dimen.padding_small)),
+                    contentScale = ContentScale.Crop
+                )
+            }
+        }
+
         OutlinedTextField(
             value = itemDetails.name,
             onValueChange = { onValueChange(itemDetails.copy(name = it)) },

@@ -1,14 +1,15 @@
 package com.linn.inventory.ui.nest
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
@@ -28,7 +29,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -122,27 +125,32 @@ private fun InventoryItem(
         modifier = modifier,
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
-        Column(
-            modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_large)),
-            verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.padding_small))
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(dimensionResource(id = R.dimen.padding_large)),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth()
+            Image(
+                painter = painterResource(id = R.drawable.picture1),
+                contentDescription = stringResource(R.string.no_image_available),
+                modifier = Modifier.size(56.dp),
+                contentScale = ContentScale.Crop
+            )
+            Column(
+                modifier = Modifier
+                    .padding(start = dimensionResource(id = R.dimen.padding_medium)),
+                verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.padding_small))
             ) {
                 Text(
                     text = item.name,
                     style = MaterialTheme.typography.titleLarge,
                 )
-                Spacer(Modifier.weight(1f))
                 Text(
-                    text = item.color,
+                    text = stringResource(R.string.in_stock, item.quantity),
                     style = MaterialTheme.typography.titleMedium
                 )
             }
-            Text(
-                text = stringResource(R.string.in_stock, item.quantity),
-                style = MaterialTheme.typography.titleMedium
-            )
         }
     }
 }
@@ -152,9 +160,9 @@ private fun InventoryItem(
 fun NestBodyPreview() {
     InventoryTheme {
         NestBody(listOf(
-            Item(1, "Game", "red", 20, "remark"),
-            Item(2, "Pen", "yellow", 30, "remark"),
-            Item(3, "TV", "teal", 50, "remark")
+            Item(1, "Game", "red", 20, "remark", ""),
+            Item(2, "Pen", "yellow", 30, "remark", ""),
+            Item(3, "TV", "teal", 50, "remark", "")
         ), onItemClick = {})
     }
 }
@@ -172,7 +180,7 @@ fun NestBodyEmptyListPreview() {
 fun InventoryItemPreview() {
     InventoryTheme {
         InventoryItem(
-            Item(1, "Game", "blue", 20, "remark"),
+            Item(1, "Game", "blue", 20, "remark", ""),
         )
     }
 }
