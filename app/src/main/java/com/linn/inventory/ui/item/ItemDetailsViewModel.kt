@@ -16,28 +16,46 @@
 
 package com.linn.inventory.ui.item
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.linn.inventory.data.Item
 import com.linn.inventory.data.ItemsRepository
+import kotlinx.coroutines.launch
 
-/**
- * ViewModel to retrieve, update and delete an item from the [ItemsRepository]'s data source.
- */
 class ItemDetailsViewModel(
-    savedStateHandle: SavedStateHandle
+    savedStateHandle: SavedStateHandle,
+    private val itemsRepository: ItemsRepository
 ) : ViewModel() {
+    var itemDetailsUiState by mutableStateOf(ItemDetailsUiState(itemDetails = ItemDetails()))
+        private set
 
     private val itemId: Int = checkNotNull(savedStateHandle[ItemDetailsDestination.ITEM_ID_ARG])
 
-    companion object {
-        private const val TIMEOUT_MILLIS = 5_000L
+    init {
+        viewModelScope.launch {
+            itemsRepository.getItemStream(itemId).collect { item ->
+                item?.let {
+                    itemDetailsUiState = itemDetailsUiState.copy(
+                        itemDetails = it.toItemDetails()
+                    )
+                }
+            }
+        }
     }
 }
 
-/**
- * UI state for ItemDetailsScreen
- */
 data class ItemDetailsUiState(
-    val outOfStock: Boolean = true,
-    val itemDetails: ItemDetails = ItemDetails()
+    var itemDetails: ItemDetails = ItemDetails()
+)
+
+fun Item.toItemDetails() = ItemDetails(
+    id = id,
+    name = name,
+    color = color,
+    quantity = quantity.toString(),
+    content = content,
 )

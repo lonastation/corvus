@@ -26,6 +26,7 @@
     <string name="item_entry_title">Add Item</string>
     <string name="item_name_req">Item Name*</string>
     <string name="item_color_req">Item Color*</string>
+    <string name="item_content_req">Item Content*</string>
     <string name="no">No</string>
     <string name="color">Color</string>
     <string name="item_content">Content</string>

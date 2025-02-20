@@ -154,6 +154,21 @@ fun ItemInputForm(
             singleLine = true
         )
         OutlinedTextField(
+            value = itemDetails.content,
+            onValueChange = { onValueChange(itemDetails.copy(content = it)) },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+            label = { Text(stringResource(R.string.item_content_req)) },
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
+                unfocusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
+                disabledContainerColor = MaterialTheme.colorScheme.secondaryContainer,
+            ),
+            leadingIcon = { Text(Currency.getInstance(Locale.getDefault()).symbol) },
+            modifier = Modifier.fillMaxWidth(),
+            enabled = enabled,
+            singleLine = true
+        )
+        OutlinedTextField(
             value = itemDetails.quantity,
             onValueChange = { onValueChange(itemDetails.copy(quantity = it)) },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),

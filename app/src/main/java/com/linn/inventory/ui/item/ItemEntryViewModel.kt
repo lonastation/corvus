@@ -76,6 +76,6 @@ fun ItemDetails.toItem(): Item = Item(
     id = id,
     name = name,
     color = color,
-    quantity = quantity.toIntOrNull() ?: 0,
+    quantity = quantity.toIntOrNull() ?: 1,
     content = content
 )

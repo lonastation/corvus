@@ -28,7 +28,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -49,9 +48,11 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import com.linn.inventory.R
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.linn.inventory.InventoryTopAppBar
+import com.linn.inventory.R
 import com.linn.inventory.data.Item
+import com.linn.inventory.ui.AppViewModelProvider
 import com.linn.inventory.ui.navigation.NavigationDestination
 import com.linn.inventory.ui.theme.InventoryTheme
 
@@ -65,6 +66,7 @@ object ItemDetailsDestination : NavigationDestination {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ItemDetailsScreen(
+    viewModel: ItemDetailsViewModel = viewModel(factory = AppViewModelProvider.Factory),
     navigateToEditItem: (Int) -> Unit,
     navigateBack: () -> Unit,
     modifier: Modifier = Modifier
@@ -91,8 +93,7 @@ fun ItemDetailsScreen(
         }, modifier = modifier
     ) { innerPadding ->
         ItemDetailsBody(
-            itemDetailsUiState = ItemDetailsUiState(),
-            onSellItem = { },
+            itemDetailsUiState = viewModel.itemDetailsUiState,
             onDelete = { },
             modifier = Modifier
                 .padding(innerPadding)
@@ -104,7 +105,6 @@ fun ItemDetailsScreen(
 @Composable
 private fun ItemDetailsBody(
     itemDetailsUiState: ItemDetailsUiState,
-    onSellItem: () -> Unit,
     onDelete: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -118,14 +118,6 @@ private fun ItemDetailsBody(
             item = itemDetailsUiState.itemDetails.toItem(),
             modifier = Modifier.fillMaxWidth()
         )
-        Button(
-            onClick = onSellItem,
-            modifier = Modifier.fillMaxWidth(),
-            shape = MaterialTheme.shapes.small,
-            enabled = true
-        ) {
-            Text(stringResource(R.string.sell))
-        }
         OutlinedButton(
             onClick = { deleteConfirmationRequired = true },
             shape = MaterialTheme.shapes.small,
@@ -236,10 +228,8 @@ fun ItemDetailsScreenPreview() {
     InventoryTheme {
         ItemDetailsBody(
             ItemDetailsUiState(
-                outOfStock = true,
                 itemDetails = ItemDetails(1, "Pen", "$100", "10")
             ),
-            onSellItem = {},
             onDelete = {}
         )
     }
