@@ -99,6 +99,7 @@ fun ItemDetailsScreen(
             onDelete = {
                 coroutineScope.launch {
                     viewModel.deleteItem()
+                    navigateBack()
                 }
             },
             modifier = Modifier

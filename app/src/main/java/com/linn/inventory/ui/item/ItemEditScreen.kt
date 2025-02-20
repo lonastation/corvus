@@ -35,8 +35,8 @@ import kotlinx.coroutines.launch
 object ItemEditDestination : NavigationDestination {
     override val route = "item_edit"
     override val titleRes = R.string.edit_item_title
-    const val itemIdArg = "itemId"
-    val routeWithArgs = "$route/{$itemIdArg}"
+    const val ITEM_ID_ARG = "itemId"
+    val routeWithArgs = "$route/{$ITEM_ID_ARG}"
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -62,9 +62,10 @@ fun ItemEditScreen(
             itemUiState = viewModel.itemUiState,
             onItemValueChange = viewModel::updateItemUiState,
             onSaveClick = {
-              coroutineScope.launch {
-                  viewModel.updateItem()
-              }
+                coroutineScope.launch {
+                    viewModel.updateItem()
+                    navigateBack()
+                }
             },
             modifier = Modifier.padding(innerPadding)
         )

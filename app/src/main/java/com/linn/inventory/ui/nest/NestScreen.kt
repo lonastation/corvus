@@ -34,17 +34,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.linn.inventory.InventoryTopAppBar
 import com.linn.inventory.R
 import com.linn.inventory.data.Item
 import com.linn.inventory.ui.AppViewModelProvider
-import com.linn.inventory.ui.navigation.NavigationDestination
 import com.linn.inventory.ui.theme.InventoryTheme
-
-object NestDestination : NavigationDestination {
-    override val route = "nest"
-    override val titleRes = R.string.app_name
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -60,13 +53,6 @@ fun NestScreen(
 
     Scaffold(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-        topBar = {
-            InventoryTopAppBar(
-                title = stringResource(NestDestination.titleRes),
-                canNavigateBack = false,
-                scrollBehavior = scrollBehavior
-            )
-        },
         floatingActionButton = {
             FloatingActionButton(
                 onClick = navigateToItemEntry,
