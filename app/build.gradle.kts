@@ -28,7 +28,7 @@ android {
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.example.inventory"
+        applicationId = "com.linn.inventory"
         minSdk = 35
         targetSdk = 35
         versionCode = 1
@@ -67,7 +67,7 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
-    namespace = "com.example.inventory"
+    namespace = "com.linn.inventory"
 }
 
 dependencies {
