@@ -2,16 +2,16 @@ package com.linn.inventory.ui.screen
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Card
@@ -28,8 +28,11 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -37,6 +40,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.linn.inventory.R
 import com.linn.inventory.data.Item
 import com.linn.inventory.ui.AppViewModelProvider
@@ -105,50 +110,87 @@ private fun NestBody(
 
 @Composable
 private fun InventoryList(
-    itemList: List<Item>, onItemClick: (Item) -> Unit, modifier: Modifier = Modifier
+    itemList: List<Item>,
+    onItemClick: (Item) -> Unit,
+    modifier: Modifier = Modifier
 ) {
-    LazyColumn(modifier = modifier) {
-        items(items = itemList, key = { it.id }) { item ->
-            InventoryItem(item = item,
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(2),
+        modifier = modifier
+    ) {
+        items(
+            count = itemList.size,
+            key = { itemList[it].id }
+        ) { index ->
+            InventoryItem(
+                item = itemList[index],
                 modifier = Modifier
                     .padding(dimensionResource(id = R.dimen.padding_small))
-                    .clickable { onItemClick(item) })
+                    .clickable { onItemClick(itemList[index]) }
+            )
         }
     }
 }
 
 @Composable
 private fun InventoryItem(
-    item: Item, modifier: Modifier = Modifier
+    item: Item,
+    modifier: Modifier = Modifier
 ) {
     Card(
         modifier = modifier,
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(dimensionResource(id = R.dimen.padding_large)),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.picture1),
-                contentDescription = stringResource(R.string.no_image_available),
-                modifier = Modifier.size(56.dp),
-                contentScale = ContentScale.Crop
-            )
+        Box {
+            if (item.photo.isBlank()) {
+                Image(
+                    painter = painterResource(id = R.drawable.picture1),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .aspectRatio(1f)
+                        .clip(MaterialTheme.shapes.medium),
+                    contentScale = ContentScale.Crop
+                )
+            } else {
+                AsyncImage(
+                    model = ImageRequest.Builder(LocalContext.current)
+                        .data(item.photo)
+                        .crossfade(true)
+                        .build(),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .aspectRatio(1f)
+                        .clip(MaterialTheme.shapes.medium),
+                    contentScale = ContentScale.Crop
+                )
+            }
+            
             Column(
                 modifier = Modifier
-                    .padding(start = dimensionResource(id = R.dimen.padding_medium)),
-                verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.padding_small))
+                    .fillMaxWidth()
+                    .align(Alignment.BottomStart)
+                    .background(
+                        Color.Black.copy(alpha = 0.6f),
+                        shape = MaterialTheme.shapes.medium
+                    )
+                    .padding(dimensionResource(id = R.dimen.padding_small))
             ) {
                 Text(
-                    text = item.name,
-                    style = MaterialTheme.typography.titleLarge,
+                    text = "#${item.id} ${item.name}",
+                    style = MaterialTheme.typography.titleMedium,
+                    color = Color.White
+                )
+                Text(
+                    text = item.type,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = Color.White
                 )
                 Text(
                     text = stringResource(R.string.in_stock, item.quantity),
-                    style = MaterialTheme.typography.titleMedium
+                    style = MaterialTheme.typography.bodySmall,
+                    color = Color.White
                 )
             }
         }
@@ -180,7 +222,7 @@ fun NestBodyEmptyListPreview() {
 fun InventoryItemPreview() {
     InventoryTheme {
         InventoryItem(
-            Item(1, "外套","Game",  20, "", ""),
+            Item(1, "外套", "Game", 20, "", "")
         )
     }
 }
