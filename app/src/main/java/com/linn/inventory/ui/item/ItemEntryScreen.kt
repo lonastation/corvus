@@ -36,6 +36,7 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -68,8 +69,16 @@ fun ItemEntryScreen(
     navigateBack: () -> Unit,
     onNavigateUp: () -> Unit,
     canNavigateBack: Boolean = true,
+    initialPhotoUri: String? = null,
     viewModel: ItemEntryViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
+    // Set the initial photo URI when the screen is first composed
+    LaunchedEffect(initialPhotoUri) {
+        initialPhotoUri?.let { uri ->
+            viewModel.updateUiState(viewModel.itemUiState.itemDetails.copy(photo = uri))
+        }
+    }
+
     val coroutineScope = rememberCoroutineScope()
     Scaffold(
         topBar = {

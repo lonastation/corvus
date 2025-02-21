@@ -35,6 +35,9 @@ import com.linn.inventory.ui.screen.NestScreen
 /**
  * Provides Navigation graph for the application.
  */
+const val PHOTO_URI_ARG = "photoUri"
+val itemEntryRoute = "${ItemEntryDestination.route}?$PHOTO_URI_ARG={$PHOTO_URI_ARG}"
+
 @Composable
 fun InventoryNavHost(
     navController: NavHostController,
@@ -46,7 +49,11 @@ fun InventoryNavHost(
         modifier = modifier
     ) {
         composable(Screens.Home.route) {
-            HomeScreen()
+            HomeScreen(
+                navigateToItemEntry = { photoUri ->
+                    navController.navigate("${ItemEntryDestination.route}?$PHOTO_URI_ARG=$photoUri")
+                }
+            )
         }
         composable(Screens.Nest.route) {
             NestScreen(
@@ -57,10 +64,20 @@ fun InventoryNavHost(
             )
         }
 
-        composable(route = ItemEntryDestination.route) {
+        composable(
+            route = itemEntryRoute,
+            arguments = listOf(
+                navArgument(PHOTO_URI_ARG) {
+                    type = NavType.StringType
+                    nullable = true
+                    defaultValue = null
+                }
+            )
+        ) {
             ItemEntryScreen(
                 navigateBack = { navController.popBackStack() },
-                onNavigateUp = { navController.navigateUp() }
+                onNavigateUp = { navController.navigateUp() },
+                initialPhotoUri = it.arguments?.getString(PHOTO_URI_ARG)
             )
         }
 
