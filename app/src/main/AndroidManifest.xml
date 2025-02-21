@@ -17,6 +17,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.linn.inventory">
 
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+    <!-- Add camera permission -->
+    <uses-permission android:name="android.permission.CAMERA" />
     <application
         android:name="com.linn.inventory.InventoryApplication"
         android:icon="@mipmap/ic_launcher"
@@ -43,8 +48,5 @@
                 android:resource="@xml/file_paths" />
         </provider>
     </application>
-
-    <!-- Add camera permission -->
-    <uses-permission android:name="android.permission.CAMERA" />
 
 </manifest>
