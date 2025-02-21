@@ -22,6 +22,7 @@ fun Item.toItemDetails() = ItemDetails(
     type = type,
     quantity = quantity.toString(),
     content = content,
+    photo = photo
 )
 
 fun ItemDetails.toItem(): Item = Item(

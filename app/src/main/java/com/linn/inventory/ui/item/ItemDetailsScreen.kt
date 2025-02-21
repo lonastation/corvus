@@ -46,15 +46,13 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
-import coil.compose.AsyncImage
-import coil.request.ImageRequest
+import coil.compose.rememberAsyncImagePainter
 import com.linn.inventory.InventoryTopAppBar
 import com.linn.inventory.R
 import com.linn.inventory.data.Item
@@ -190,12 +188,9 @@ fun ItemDetails(
                         .padding(dimensionResource(id = R.dimen.padding_small))
                 )
             } else {
-                AsyncImage(
-                    model = ImageRequest.Builder(LocalContext.current)
-                        .data(item.photo)
-                        .crossfade(true)
-                        .build(),
-                    contentDescription = null,
+                Image(
+                    painter = rememberAsyncImagePainter(model = item.photo),
+                    contentDescription = item.type,
                     modifier = Modifier
                         .size(dimensionResource(id = R.dimen.image_size))
                         .padding(dimensionResource(id = R.dimen.padding_small)),
