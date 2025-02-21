@@ -51,9 +51,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.linn.inventory.R
-import com.linn.inventory.ui.AppViewModelProvider
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -64,9 +62,7 @@ import java.util.Locale
  */
 @Composable
 fun HomeScreen(
-    navigateToItemEntry: (String) -> Unit,
-    modifier: Modifier = Modifier,
-    viewModel: HomeViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    navigateToItemEntry: (String) -> Unit
 ) {
     val context = LocalContext.current
     var showPermissionDialog by remember { mutableStateOf(false) }
@@ -211,7 +207,6 @@ fun HomeScreen(
 @Composable
 private fun HomeScreenPreview() {
     HomeScreen(
-        navigateToItemEntry = {},
-        modifier = Modifier
+        navigateToItemEntry = {}
     )
 }
