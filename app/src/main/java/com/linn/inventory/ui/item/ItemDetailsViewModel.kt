@@ -16,21 +16,20 @@
 
 package com.linn.inventory.ui.item
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.linn.inventory.data.ItemsRepository
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class ItemDetailsViewModel(
     savedStateHandle: SavedStateHandle,
     private val itemsRepository: ItemsRepository
 ) : ViewModel() {
-    var itemUiState by mutableStateOf(ItemUiState(itemDetails = ItemDetails()))
-        private set
+    private var _itemUiState = MutableStateFlow(ItemUiState(itemDetails = ItemDetails()))
+    val itemUiState: StateFlow<ItemUiState> = _itemUiState
 
     private val itemId: Int = checkNotNull(savedStateHandle[ItemDetailsDestination.ITEM_ID_ARG])
 
@@ -38,15 +37,13 @@ class ItemDetailsViewModel(
         viewModelScope.launch {
             itemsRepository.getItemStream(itemId).collect { item ->
                 item?.let {
-                    itemUiState = itemUiState.copy(
-                        itemDetails = it.toItemDetails()
-                    )
+                    _itemUiState.value = ItemUiState(itemDetails = ItemDetails())
                 }
             }
         }
     }
 
     suspend fun deleteItem() {
-        itemsRepository.deleteItem(item = itemUiState.itemDetails.toItem())
+        itemsRepository.deleteItem(item = _itemUiState.value.itemDetails.toItem())
     }
 }

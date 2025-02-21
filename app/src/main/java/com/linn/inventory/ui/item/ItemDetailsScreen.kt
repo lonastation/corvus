@@ -27,20 +27,18 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
@@ -75,12 +73,14 @@ object ItemDetailsDestination : NavigationDestination {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ItemDetailsScreen(
-    viewModel: ItemDetailsViewModel = viewModel(factory = AppViewModelProvider.Factory),
     navigateToEditItem: (Int) -> Unit,
     navigateBack: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    viewModel: ItemDetailsViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
+    val itemUiState by viewModel.itemUiState.collectAsState()
     val coroutineScope = rememberCoroutineScope()
+
     Scaffold(
         topBar = {
             InventoryTopAppBar(
@@ -88,27 +88,29 @@ fun ItemDetailsScreen(
                 canNavigateBack = true,
                 navigateUp = navigateBack
             )
-        }, floatingActionButton = {
-            FloatingActionButton(
-                onClick = { navigateToEditItem(viewModel.itemUiState.itemDetails.id) },
-                shape = MaterialTheme.shapes.medium,
-                modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_large))
+        },
+        modifier = modifier,
+        bottomBar = {
+            Button(
+                onClick = navigateBack,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(dimensionResource(id = R.dimen.padding_medium)),
+                shape = MaterialTheme.shapes.small
             ) {
-                Icon(
-                    imageVector = Icons.Default.Edit,
-                    contentDescription = stringResource(R.string.edit_item_title),
-                )
+                Text(stringResource(R.string.back_button))
             }
-        }, modifier = modifier
+        }
     ) { innerPadding ->
         ItemDetailsBody(
-            itemUiState = viewModel.itemUiState,
+            itemDetails = itemUiState.itemDetails,
             onDelete = {
                 coroutineScope.launch {
                     viewModel.deleteItem()
                     navigateBack()
                 }
             },
+            onEditClick = { navigateToEditItem(it) },
             modifier = Modifier
                 .padding(innerPadding)
                 .verticalScroll(rememberScrollState())
@@ -118,8 +120,9 @@ fun ItemDetailsScreen(
 
 @Composable
 private fun ItemDetailsBody(
-    itemUiState: ItemUiState,
+    itemDetails: ItemDetails,
     onDelete: () -> Unit,
+    onEditClick: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -129,7 +132,7 @@ private fun ItemDetailsBody(
         var deleteConfirmationRequired by rememberSaveable { mutableStateOf(false) }
 
         ItemDetails(
-            item = itemUiState.itemDetails.toItem(),
+            item = itemDetails.toItem(),
             modifier = Modifier.fillMaxWidth()
         )
         OutlinedButton(
@@ -138,6 +141,13 @@ private fun ItemDetailsBody(
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(stringResource(R.string.delete))
+        }
+        OutlinedButton(
+            onClick = { onEditClick(itemDetails.id) },
+            shape = MaterialTheme.shapes.small,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(stringResource(R.string.edit_item_title))
         }
         if (deleteConfirmationRequired) {
             DeleteConfirmationDialog(
@@ -263,10 +273,9 @@ private fun DeleteConfirmationDialog(
 fun ItemDetailsScreenPreview() {
     InventoryTheme {
         ItemDetailsBody(
-            ItemUiState(
-                itemDetails = ItemDetails(1, "Pen", "$100", "10")
-            ),
-            onDelete = {}
+            ItemDetails(1, "Pen", "$100", "10"),
+            onDelete = {},
+            onEditClick = {}
         )
     }
 }

@@ -43,6 +43,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.linn.inventory.ui.navigation.InventoryNavHost
 import com.linn.inventory.ui.navigation.Screens
@@ -62,36 +63,49 @@ fun BottomNavigationBar(navController: NavHostController) {
         mutableIntStateOf(0)
     }
 
+    val currentBackStack by navController.currentBackStackEntryAsState()
+    val currentDestination = currentBackStack?.destination
+
+    // Determine if we should show the bottom bar
+    val shouldShowBottomBar = currentDestination?.route in setOf(
+        Screens.Home.route,
+        Screens.Nest.route
+        // Add other main screen routes here
+    )
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         bottomBar = {
-            NavigationBar {
-                BottomNavigationItem().bottomNavigationItems()
-                    .forEachIndexed { index, navigationItem ->
-                        NavigationBarItem(
-                            selected = index == navigationSelectedItem,
-                            label = {
-                                Text(navigationItem.label)
-                            },
-                            icon = {
-                                Icon(
-                                    navigationItem.icon,
-                                    contentDescription = navigationItem.label
-                                )
-                            },
-                            onClick = {
-                                navigationSelectedItem = index
-                                navController.navigate(navigationItem.route) {
-                                    popUpTo(navController.graph.findStartDestination().id) {
-                                        saveState = true
+            if (shouldShowBottomBar) {
+                NavigationBar {
+                    BottomNavigationItem().bottomNavigationItems()
+                        .forEachIndexed { index, navigationItem ->
+                            NavigationBarItem(
+                                selected = index == navigationSelectedItem,
+                                label = {
+                                    Text(navigationItem.label)
+                                },
+                                icon = {
+                                    Icon(
+                                        navigationItem.icon,
+                                        contentDescription = navigationItem.label
+                                    )
+                                },
+                                onClick = {
+                                    navigationSelectedItem = index
+                                    navController.navigate(navigationItem.route) {
+                                        popUpTo(navController.graph.findStartDestination().id) {
+                                            saveState = true
+                                        }
+                                        launchSingleTop = true
+                                        restoreState = true
                                     }
-                                    launchSingleTop = true
-                                    restoreState = true
                                 }
-                            }
-                        )
-                    }
+                            )
+                        }
+                }
             }
+
         }
     ) { paddingValues ->
         InventoryNavHost(
