@@ -1,4 +1,4 @@
-package com.linn.inventory.ui.nest
+package com.linn.inventory.ui.screen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

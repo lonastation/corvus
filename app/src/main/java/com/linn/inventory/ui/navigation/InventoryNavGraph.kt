@@ -23,14 +23,14 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.linn.inventory.ui.home.HomeScreen
+import com.linn.inventory.ui.screen.HomeScreen
 import com.linn.inventory.ui.item.ItemDetailsDestination
 import com.linn.inventory.ui.item.ItemDetailsScreen
 import com.linn.inventory.ui.item.ItemEditDestination
 import com.linn.inventory.ui.item.ItemEditScreen
 import com.linn.inventory.ui.item.ItemEntryDestination
 import com.linn.inventory.ui.item.ItemEntryScreen
-import com.linn.inventory.ui.nest.NestScreen
+import com.linn.inventory.ui.screen.NestScreen
 
 /**
  * Provides Navigation graph for the application.

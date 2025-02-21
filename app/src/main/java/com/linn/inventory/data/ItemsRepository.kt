@@ -32,6 +32,8 @@ interface ItemsRepository {
      */
     fun getItemStream(id: Int): Flow<Item?>
 
+    fun getItemTypeStream(): Flow<List<String>>
+
     /**
      * Insert item in the data source
      */

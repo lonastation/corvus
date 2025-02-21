@@ -1,4 +1,4 @@
-package com.linn.inventory.ui.nest
+package com.linn.inventory.ui.screen
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
@@ -160,9 +160,9 @@ private fun InventoryItem(
 fun NestBodyPreview() {
     InventoryTheme {
         NestBody(listOf(
-            Item(1, "Game", "red", 20, "remark", ""),
-            Item(2, "Pen", "yellow", 30, "remark", ""),
-            Item(3, "TV", "teal", 50, "remark", "")
+            Item(1, "外套", "", 20, "", ""),
+            Item(2, "短裤", "",  30, "", ""),
+            Item(3, "T恤", "",  50, "", "")
         ), onItemClick = {})
     }
 }
@@ -180,7 +180,7 @@ fun NestBodyEmptyListPreview() {
 fun InventoryItemPreview() {
     InventoryTheme {
         InventoryItem(
-            Item(1, "Game", "blue", 20, "remark", ""),
+            Item(1, "外套","Game",  20, "", ""),
         )
     }
 }

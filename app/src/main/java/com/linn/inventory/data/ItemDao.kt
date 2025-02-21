@@ -24,4 +24,7 @@ interface ItemDao {
 
     @Query("SELECT * from items ORDER BY name ASC")
     fun getAllItems(): Flow<List<Item>>
+
+    @Query("SELECT DISTINCT type from items where type <> '' ORDER BY id ASC")
+    fun getAllTypes(): Flow<List<String>>
 }

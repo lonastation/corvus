@@ -20,16 +20,13 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 
-/**
- * Entity data class represents a single row in the database.
- */
 @Entity(tableName = "items")
 data class Item(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
+    val type: String,
     val name: String,
-    val color: String,
     val quantity: Int,
     val content: String,
-    val photoPath: String
+    val photo: String
 )

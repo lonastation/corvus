@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.linn.inventory.ui.home
+package com.linn.inventory.ui.screen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

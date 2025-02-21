@@ -20,7 +20,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import com.linn.inventory.data.Item
 import com.linn.inventory.data.ItemsRepository
 
 /**
@@ -51,33 +50,7 @@ class ItemEntryViewModel(private val itemsRepository: ItemsRepository) : ViewMod
 
     private fun validateInput(uiState: ItemDetails = itemUiState.itemDetails): Boolean {
         return with(uiState) {
-            name.isNotBlank() && color.isNotBlank() && quantity.isNotBlank()
+            type.isNotBlank() && quantity.isNotBlank()
         }
     }
 }
-
-/**
- * Represents Ui State for an Item.
- */
-data class ItemUiState(
-    val itemDetails: ItemDetails = ItemDetails(),
-    val isEntryValid: Boolean = false
-)
-
-data class ItemDetails(
-    val id: Int = 0,
-    val name: String = "",
-    val color: String = "",
-    val quantity: String = "",
-    val content: String = "",
-    val photoPath: String = ""
-)
-
-fun ItemDetails.toItem(): Item = Item(
-    id = id,
-    name = name,
-    color = color,
-    quantity = quantity.toIntOrNull() ?: 1,
-    content = content,
-    photoPath = photoPath
-)

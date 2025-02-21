@@ -55,6 +55,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.linn.inventory.InventoryTopAppBar
 import com.linn.inventory.R
 import com.linn.inventory.data.Item
@@ -62,8 +64,6 @@ import com.linn.inventory.ui.AppViewModelProvider
 import com.linn.inventory.ui.navigation.NavigationDestination
 import com.linn.inventory.ui.theme.InventoryTheme
 import kotlinx.coroutines.launch
-import coil.compose.AsyncImage
-import coil.request.ImageRequest
 
 object ItemDetailsDestination : NavigationDestination {
     override val route = "item_details"
@@ -90,7 +90,7 @@ fun ItemDetailsScreen(
             )
         }, floatingActionButton = {
             FloatingActionButton(
-                onClick = { navigateToEditItem(viewModel.itemDetailsUiState.itemDetails.id) },
+                onClick = { navigateToEditItem(viewModel.itemUiState.itemDetails.id) },
                 shape = MaterialTheme.shapes.medium,
                 modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_large))
             ) {
@@ -102,7 +102,7 @@ fun ItemDetailsScreen(
         }, modifier = modifier
     ) { innerPadding ->
         ItemDetailsBody(
-            itemDetailsUiState = viewModel.itemDetailsUiState,
+            itemUiState = viewModel.itemUiState,
             onDelete = {
                 coroutineScope.launch {
                     viewModel.deleteItem()
@@ -118,7 +118,7 @@ fun ItemDetailsScreen(
 
 @Composable
 private fun ItemDetailsBody(
-    itemDetailsUiState: ItemDetailsUiState,
+    itemUiState: ItemUiState,
     onDelete: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -129,7 +129,7 @@ private fun ItemDetailsBody(
         var deleteConfirmationRequired by rememberSaveable { mutableStateOf(false) }
 
         ItemDetails(
-            item = itemDetailsUiState.itemDetails.toItem(),
+            item = itemUiState.itemDetails.toItem(),
             modifier = Modifier.fillMaxWidth()
         )
         OutlinedButton(
@@ -171,7 +171,7 @@ fun ItemDetails(
                 dimensionResource(id = R.dimen.padding_medium)
             )
         ) {
-            if (item.photoPath.isBlank()) {
+            if (item.photo.isBlank()) {
                 Image(
                     painter = painterResource(id = R.drawable.picture1),
                     contentDescription = stringResource(R.string.no_image_available),
@@ -182,7 +182,7 @@ fun ItemDetails(
             } else {
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
-                        .data(item.photoPath)
+                        .data(item.photo)
                         .crossfade(true)
                         .build(),
                     contentDescription = null,
@@ -192,7 +192,7 @@ fun ItemDetails(
                     contentScale = ContentScale.Crop
                 )
             }
-            
+
             ItemDetailsRow(
                 labelResID = R.string.item,
                 itemDetail = item.name,
@@ -208,8 +208,8 @@ fun ItemDetails(
                 )
             )
             ItemDetailsRow(
-                labelResID = R.string.color,
-                itemDetail = item.color,
+                labelResID = R.string.type,
+                itemDetail = item.type,
                 modifier = Modifier.padding(
                     horizontal = dimensionResource(id = R.dimen.padding_medium)
                 )
@@ -263,7 +263,7 @@ private fun DeleteConfirmationDialog(
 fun ItemDetailsScreenPreview() {
     InventoryTheme {
         ItemDetailsBody(
-            ItemDetailsUiState(
+            ItemUiState(
                 itemDetails = ItemDetails(1, "Pen", "$100", "10")
             ),
             onDelete = {}

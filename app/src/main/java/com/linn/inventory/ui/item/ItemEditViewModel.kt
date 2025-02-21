@@ -43,20 +43,19 @@ class ItemEditViewModel(
 
     init {
         viewModelScope.launch {
-            itemsRepository.getItemStream(itemId).collect{
-                        item ->
-                    item?.let {
-                        itemUiState = itemUiState.copy(
-                            itemDetails = it.toItemDetails()
-                        )
-                    }
+            itemsRepository.getItemStream(itemId).collect { item ->
+                item?.let {
+                    itemUiState = itemUiState.copy(
+                        itemDetails = it.toItemDetails()
+                    )
                 }
+            }
         }
     }
 
     private fun validateInput(uiState: ItemDetails = itemUiState.itemDetails): Boolean {
         return with(uiState) {
-            name.isNotBlank() && color.isNotBlank() && quantity.isNotBlank()
+            type.isNotBlank() && quantity.isNotBlank()
         }
     }
 

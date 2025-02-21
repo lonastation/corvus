@@ -136,7 +136,7 @@ fun ItemInputForm(
         ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
         uri?.let {
-            onValueChange(itemDetails.copy(photoPath = it.toString()))
+            onValueChange(itemDetails.copy(photo = it.toString()))
         }
     }
 
@@ -144,7 +144,7 @@ fun ItemInputForm(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.padding_medium))
     ) {
-        if (itemDetails.photoPath.isBlank()) {
+        if (itemDetails.photo.isBlank()) {
             OutlinedCard(
                 onClick = { photoPickerLauncher.launch("image/*") },
                 modifier = Modifier
@@ -168,7 +168,7 @@ fun ItemInputForm(
             ) {
                 AsyncImage(
                     model = ImageRequest.Builder(context)
-                        .data(itemDetails.photoPath)
+                        .data(itemDetails.photo)
                         .crossfade(true)
                         .build(),
                     contentDescription = null,
@@ -194,10 +194,10 @@ fun ItemInputForm(
             singleLine = true
         )
         OutlinedTextField(
-            value = itemDetails.color,
-            onValueChange = { onValueChange(itemDetails.copy(color = it)) },
+            value = itemDetails.type,
+            onValueChange = { onValueChange(itemDetails.copy(type = it)) },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-            label = { Text(stringResource(R.string.item_color_req)) },
+            label = { Text(stringResource(R.string.item_type_req)) },
             colors = OutlinedTextFieldDefaults.colors(
                 focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
                 unfocusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
@@ -252,7 +252,7 @@ private fun ItemEntryScreenPreview() {
     InventoryTheme {
         ItemEntryBody(itemUiState = ItemUiState(
             ItemDetails(
-                name = "Item name", color = "red", quantity = "5", content = ""
+                name = "Item name", type = "t-shirt", quantity = "5", content = ""
             )
         ), onItemValueChange = {}, onSaveClick = {})
     }

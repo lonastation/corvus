@@ -9,7 +9,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 
 @Database(
     entities = [Item::class],
-    version = 2,
+    version = 3,
     exportSchema = false
 )
 abstract class InventoryDatabase : RoomDatabase() {
@@ -21,15 +21,16 @@ abstract class InventoryDatabase : RoomDatabase() {
         private var Instance: InventoryDatabase? = null
 
         fun getDatabase(context: Context): InventoryDatabase {
-            val migrationFrom1To2 = object : Migration(1, 2) {
+            val migrationFrom2To3 = object : Migration(1, 2) {
                 override fun migrate(db: SupportSQLiteDatabase) {
-                    db.execSQL("ALTER TABLE items ADD COLUMN photoPath TEXT NOT NULL DEFAULT undefined")
+                    db.execSQL("ALTER TABLE items RENAME COLUMN color TO type")
+                    db.execSQL("ALTER TABLE items RENAME COLUMN photoPath TO photo")
                 }
             }
 
             return Instance ?: synchronized(this) {
                 Room.databaseBuilder(context, InventoryDatabase::class.java, "item_database")
-                    .addMigrations(migrationFrom1To2)
+                    .addMigrations(migrationFrom2To3)
                     .build().also { Instance = it }
             }
         }

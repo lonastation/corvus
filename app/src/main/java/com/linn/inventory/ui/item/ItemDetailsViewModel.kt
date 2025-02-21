@@ -22,7 +22,6 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.linn.inventory.data.Item
 import com.linn.inventory.data.ItemsRepository
 import kotlinx.coroutines.launch
 
@@ -30,7 +29,7 @@ class ItemDetailsViewModel(
     savedStateHandle: SavedStateHandle,
     private val itemsRepository: ItemsRepository
 ) : ViewModel() {
-    var itemDetailsUiState by mutableStateOf(ItemDetailsUiState(itemDetails = ItemDetails()))
+    var itemUiState by mutableStateOf(ItemUiState(itemDetails = ItemDetails()))
         private set
 
     private val itemId: Int = checkNotNull(savedStateHandle[ItemDetailsDestination.ITEM_ID_ARG])
@@ -39,7 +38,7 @@ class ItemDetailsViewModel(
         viewModelScope.launch {
             itemsRepository.getItemStream(itemId).collect { item ->
                 item?.let {
-                    itemDetailsUiState = itemDetailsUiState.copy(
+                    itemUiState = itemUiState.copy(
                         itemDetails = it.toItemDetails()
                     )
                 }
@@ -48,18 +47,6 @@ class ItemDetailsViewModel(
     }
 
     suspend fun deleteItem() {
-        itemsRepository.deleteItem(item = itemDetailsUiState.itemDetails.toItem())
+        itemsRepository.deleteItem(item = itemUiState.itemDetails.toItem())
     }
 }
-
-data class ItemDetailsUiState(
-    var itemDetails: ItemDetails = ItemDetails()
-)
-
-fun Item.toItemDetails() = ItemDetails(
-    id = id,
-    name = name,
-    color = color,
-    quantity = quantity.toString(),
-    content = content,
-)
