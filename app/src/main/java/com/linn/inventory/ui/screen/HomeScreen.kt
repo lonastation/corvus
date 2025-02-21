@@ -70,6 +70,7 @@ fun HomeScreen(
 ) {
     val context = LocalContext.current
     var showPermissionDialog by remember { mutableStateOf(false) }
+    var currentPhotoUri by remember { mutableStateOf<Uri?>(null) }
 
     // For picking photo from gallery
     val photoPickerLauncher = rememberLauncherForActivityResult(
@@ -80,23 +81,29 @@ fun HomeScreen(
         }
     }
 
-    // For taking photo with camera
-    val photoFile = File.createTempFile(
-        "corvus_${SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(Date())}_",
-        ".jpg",
-        context.cacheDir
-    )
-    val photoUri = FileProvider.getUriForFile(
-        context,
-        "${context.packageName}.fileprovider",
-        photoFile
-    )
+    // Create photo file function
+    val createPhotoFile = {
+        File(
+            context.getExternalFilesDir(null),
+            "corvus_${SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(Date())}.jpg"
+        ).apply {
+            createNewFile()
+            currentPhotoUri = FileProvider.getUriForFile(
+                context,
+                "${context.packageName}.fileprovider",
+                this
+            )
+        }
+    }
 
+    // For taking photo with camera
     val takePictureLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.TakePicture()
     ) { success ->
         if (success) {
-            navigateToItemEntry(photoUri.toString())
+            currentPhotoUri?.let { uri ->
+                navigateToItemEntry(uri.toString())
+            }
         }
     }
 
@@ -106,7 +113,7 @@ fun HomeScreen(
     ) { isGranted: Boolean ->
         if (isGranted) {
             // Permission granted, launch camera
-            takePictureLauncher.launch(photoUri)
+            currentPhotoUri?.let { takePictureLauncher.launch(it) }
         } else {
             // Show dialog explaining why we need the permission
             showPermissionDialog = true
@@ -170,10 +177,10 @@ fun HomeScreen(
                             context,
                             Manifest.permission.CAMERA
                         ) -> {
-                            // Permission already granted, launch camera
-                            takePictureLauncher.launch(photoUri)
+                            // Create the photo file before launching camera
+                            createPhotoFile()
+                            currentPhotoUri?.let { takePictureLauncher.launch(it) }
                         }
-
                         else -> {
                             // Request permission
                             permissionLauncher.launch(Manifest.permission.CAMERA)
