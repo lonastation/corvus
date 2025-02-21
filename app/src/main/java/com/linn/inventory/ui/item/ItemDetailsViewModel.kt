@@ -37,7 +37,7 @@ class ItemDetailsViewModel(
         viewModelScope.launch {
             itemsRepository.getItemStream(itemId).collect { item ->
                 item?.let {
-                    _itemUiState.value = ItemUiState(itemDetails = ItemDetails())
+                    _itemUiState.value = ItemUiState(itemDetails = it.toItemDetails())
                 }
             }
         }
