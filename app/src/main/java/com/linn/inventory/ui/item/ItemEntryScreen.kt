@@ -58,9 +58,9 @@ import androidx.core.content.FileProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.linn.inventory.InventoryTopAppBar
 import com.linn.inventory.R
 import com.linn.inventory.ui.AppViewModelProvider
+import com.linn.inventory.ui.navigation.InventoryTopAppBar
 import com.linn.inventory.ui.navigation.NavigationDestination
 import com.linn.inventory.ui.theme.InventoryTheme
 import kotlinx.coroutines.launch
@@ -176,7 +176,7 @@ fun ItemInputForm(
             )
         }
     }
-    
+
     val takePictureLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.TakePicture()
     ) { success ->
