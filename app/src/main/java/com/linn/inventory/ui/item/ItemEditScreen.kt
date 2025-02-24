@@ -17,6 +17,8 @@
 package com.linn.inventory.ui.item
 
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -25,9 +27,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.linn.inventory.ui.navigation.InventoryTopAppBar
 import com.linn.inventory.R
 import com.linn.inventory.ui.AppViewModelProvider
+import com.linn.inventory.ui.navigation.InventoryTopAppBar
 import com.linn.inventory.ui.navigation.NavigationDestination
 import com.linn.inventory.ui.theme.InventoryTheme
 import kotlinx.coroutines.launch
@@ -67,7 +69,9 @@ fun ItemEditScreen(
                     navigateBack()
                 }
             },
-            modifier = Modifier.padding(innerPadding)
+            modifier = Modifier
+                .padding(innerPadding)
+                .verticalScroll(rememberScrollState())
         )
     }
 }
