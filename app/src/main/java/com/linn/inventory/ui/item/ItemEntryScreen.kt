@@ -180,7 +180,7 @@ fun ItemInputForm(
                         .data(itemDetails.photo)
                         .crossfade(true)
                         .build(),
-                    contentDescription = null,
+                    contentDescription = itemDetails.type,
                     modifier = Modifier
                         .size(dimensionResource(id = R.dimen.image_size))
                         .padding(dimensionResource(id = R.dimen.padding_small)),
@@ -213,7 +213,6 @@ fun ItemInputForm(
                 unfocusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
                 disabledContainerColor = MaterialTheme.colorScheme.secondaryContainer,
             ),
-            leadingIcon = { Text(Currency.getInstance(Locale.getDefault()).symbol) },
             modifier = Modifier.fillMaxWidth(),
             enabled = enabled,
             singleLine = true
@@ -228,7 +227,6 @@ fun ItemInputForm(
                 unfocusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
                 disabledContainerColor = MaterialTheme.colorScheme.secondaryContainer,
             ),
-            leadingIcon = { Text(Currency.getInstance(Locale.getDefault()).symbol) },
             modifier = Modifier.fillMaxWidth(),
             enabled = enabled,
             singleLine = true

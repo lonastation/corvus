@@ -32,6 +32,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -39,12 +40,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import coil.compose.rememberAsyncImagePainter
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.linn.inventory.R
 import com.linn.inventory.data.Item
 import com.linn.inventory.ui.AppViewModelProvider
 import com.linn.inventory.ui.theme.InventoryTheme
-import java.io.File
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -136,6 +137,7 @@ private fun InventoryItem(
     item: Item,
     modifier: Modifier = Modifier
 ) {
+    val context = LocalContext.current
     Card(
         modifier = modifier,
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
@@ -152,9 +154,12 @@ private fun InventoryItem(
                     contentScale = ContentScale.Crop
                 )
             } else {
-                Image(
-                    painter = rememberAsyncImagePainter(File(item.photo)),
-                    contentDescription = null,
+                AsyncImage(
+                    model = ImageRequest.Builder(context)
+                        .data(item.photo)
+                        .crossfade(true)
+                        .build(),
+                    contentDescription = item.type,
                     modifier = Modifier
                         .fillMaxWidth()
                         .aspectRatio(1f)
