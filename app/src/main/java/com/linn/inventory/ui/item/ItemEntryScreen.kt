@@ -16,17 +16,21 @@
 
 package com.linn.inventory.ui.item
 
+import android.content.Intent
 import android.net.Uri
+import android.provider.Settings
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -35,17 +39,22 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.content.FileProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
@@ -55,7 +64,9 @@ import com.linn.inventory.ui.AppViewModelProvider
 import com.linn.inventory.ui.navigation.NavigationDestination
 import com.linn.inventory.ui.theme.InventoryTheme
 import kotlinx.coroutines.launch
-import java.util.Currency
+import java.io.File
+import java.text.SimpleDateFormat
+import java.util.Date
 import java.util.Locale
 
 object ItemEntryDestination : NavigationDestination {
@@ -141,6 +152,9 @@ fun ItemInputForm(
     enabled: Boolean = true
 ) {
     val context = LocalContext.current
+    var currentPhotoUri by remember { mutableStateOf<Uri?>(null) }
+    var showPermissionDialog by remember { mutableStateOf(false) }
+
     val photoPickerLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
@@ -149,43 +163,108 @@ fun ItemInputForm(
         }
     }
 
+    val createPhotoFile = {
+        File(
+            context.getExternalFilesDir(null),
+            "corvus_${SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(Date())}.jpg"
+        ).apply {
+            createNewFile()
+            currentPhotoUri = FileProvider.getUriForFile(
+                context,
+                "${context.packageName}.fileprovider",
+                this
+            )
+        }
+    }
+    
+    val takePictureLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.TakePicture()
+    ) { success ->
+        if (success) {
+            // Handle the temporary URI that was set up before launching the camera
+            currentPhotoUri?.let { uri ->
+                onValueChange(itemDetails.copy(photo = uri.toString()))
+            }
+        }
+    }
+
+    val permissionLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+            // Permission granted, proceed with taking photo
+            createPhotoFile()
+            currentPhotoUri?.let { takePictureLauncher.launch(it) }
+        } else {
+            // Show dialog when permission is denied
+            showPermissionDialog = true
+        }
+    }
+
+    if (showPermissionDialog) {
+        AlertDialog(
+            onDismissRequest = { showPermissionDialog = false },
+            title = { Text(stringResource(R.string.permission_required)) },
+            text = { Text(stringResource(R.string.camera_permission_explanation)) },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        showPermissionDialog = false
+                        // Open app settings
+                        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                            data = Uri.fromParts("package", context.packageName, null)
+                        }
+                        context.startActivity(intent)
+                    }
+                ) {
+                    Text(stringResource(R.string.request_permission))
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showPermissionDialog = false }) {
+                    Text(stringResource(R.string.cancel))
+                }
+            }
+        )
+    }
+
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.padding_medium))
     ) {
-        if (itemDetails.photo.isBlank()) {
-            OutlinedCard(
-                onClick = { photoPickerLauncher.launch("image/*") },
+        OutlinedCard(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(dimensionResource(id = R.dimen.padding_small))
+        ) {
+            AsyncImage(
+                model = ImageRequest.Builder(context)
+                    .data(itemDetails.photo.ifBlank { R.drawable.picture1 })
+                    .crossfade(true)
+                    .build(),
+                contentDescription = itemDetails.type,
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(dimensionResource(id = R.dimen.padding_small))
+                    .size(dimensionResource(id = R.dimen.image_size))
+                    .padding(dimensionResource(id = R.dimen.padding_small)),
+                contentScale = ContentScale.Crop
+            )
+        }
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.padding_medium))
+        ) {
+            Button(
+                onClick = { photoPickerLauncher.launch("image/*") },
+                modifier = Modifier.weight(1f)
             ) {
-                Text(
-                    text = stringResource(R.string.add_photo),
-                    modifier = Modifier
-                        .padding(dimensionResource(id = R.dimen.padding_medium))
-                        .fillMaxWidth(),
-                    textAlign = TextAlign.Center
-                )
+                Text(text = stringResource(R.string.choose_photo))
             }
-        } else {
-            OutlinedCard(
-                onClick = { photoPickerLauncher.launch("image/*") },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(dimensionResource(id = R.dimen.padding_small))
+            Button(
+                onClick = { permissionLauncher.launch(android.Manifest.permission.CAMERA) },
+                modifier = Modifier.weight(1f)
             ) {
-                AsyncImage(
-                    model = ImageRequest.Builder(context)
-                        .data(itemDetails.photo)
-                        .crossfade(true)
-                        .build(),
-                    contentDescription = itemDetails.type,
-                    modifier = Modifier
-                        .size(dimensionResource(id = R.dimen.image_size))
-                        .padding(dimensionResource(id = R.dimen.padding_small)),
-                    contentScale = ContentScale.Crop
-                )
+                Text(text = stringResource(R.string.take_photo))
             }
         }
 
