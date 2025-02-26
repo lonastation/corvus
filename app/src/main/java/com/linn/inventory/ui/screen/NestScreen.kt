@@ -68,13 +68,11 @@ fun NestScreen(
                 )
             }
         },
-    ) { innerPadding ->
+    ) {
         NestBody(
             itemList = nestUiState.itemList,
             onItemClick = navigateToItemUpdate,
-            modifier = Modifier
-                .padding(innerPadding)
-                .fillMaxSize()
+            modifier = Modifier.fillMaxSize()
         )
     }
 }
