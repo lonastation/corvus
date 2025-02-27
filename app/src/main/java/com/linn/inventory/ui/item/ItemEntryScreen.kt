@@ -16,6 +16,7 @@
 
 package com.linn.inventory.ui.item
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
@@ -32,7 +33,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.OutlinedTextField
@@ -60,7 +60,6 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.linn.inventory.R
 import com.linn.inventory.ui.AppViewModelProvider
-import com.linn.inventory.ui.navigation.InventoryTopAppBar
 import com.linn.inventory.ui.navigation.NavigationDestination
 import com.linn.inventory.ui.theme.InventoryTheme
 import kotlinx.coroutines.launch
@@ -74,12 +73,10 @@ object ItemEntryDestination : NavigationDestination {
     override val titleRes = R.string.item_entry_title
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun ItemEntryScreen(
     navigateBack: () -> Unit,
-    onNavigateUp: () -> Unit,
-    canNavigateBack: Boolean = true,
     initialPhotoUri: String? = null,
     viewModel: ItemEntryViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
@@ -92,14 +89,19 @@ fun ItemEntryScreen(
 
     val coroutineScope = rememberCoroutineScope()
     Scaffold(
-        topBar = {
-            InventoryTopAppBar(
-                title = stringResource(ItemEntryDestination.titleRes),
-                canNavigateBack = canNavigateBack,
-                navigateUp = onNavigateUp
-            )
+        modifier = Modifier,
+        bottomBar = {
+            Button(
+                onClick = navigateBack,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(dimensionResource(id = R.dimen.padding_medium)),
+                shape = MaterialTheme.shapes.small
+            ) {
+                Text(stringResource(R.string.back_button))
+            }
         }
-    ) { innerPadding ->
+    ) {
         ItemEntryBody(
             itemUiState = viewModel.itemUiState,
             onItemValueChange = viewModel::updateUiState,
@@ -110,7 +112,6 @@ fun ItemEntryScreen(
                 }
             },
             modifier = Modifier
-                .padding(innerPadding)
                 .verticalScroll(rememberScrollState())
                 .fillMaxWidth()
         )

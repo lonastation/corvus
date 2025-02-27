@@ -23,13 +23,13 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.linn.inventory.ui.screen.HomeScreen
 import com.linn.inventory.ui.item.ItemDetailsDestination
 import com.linn.inventory.ui.item.ItemDetailsScreen
 import com.linn.inventory.ui.item.ItemEditDestination
 import com.linn.inventory.ui.item.ItemEditScreen
 import com.linn.inventory.ui.item.ItemEntryDestination
 import com.linn.inventory.ui.item.ItemEntryScreen
+import com.linn.inventory.ui.screen.HomeScreen
 import com.linn.inventory.ui.screen.NestScreen
 
 /**
@@ -76,7 +76,6 @@ fun InventoryNavHost(
         ) {
             ItemEntryScreen(
                 navigateBack = { navController.popBackStack() },
-                onNavigateUp = { navController.navigateUp() },
                 initialPhotoUri = it.arguments?.getString(PHOTO_URI_ARG)
             )
         }
@@ -99,8 +98,7 @@ fun InventoryNavHost(
             })
         ) {
             ItemEditScreen(
-                navigateBack = { navController.popBackStack() },
-                onNavigateUp = { navController.navigateUp() }
+                navigateBack = { navController.popBackStack() }
             )
         }
     }

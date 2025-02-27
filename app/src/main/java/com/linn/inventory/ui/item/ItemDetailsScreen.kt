@@ -16,6 +16,7 @@
 
 package com.linn.inventory.ui.item
 
+import android.annotation.SuppressLint
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -31,7 +32,6 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
@@ -56,7 +56,6 @@ import coil.compose.rememberAsyncImagePainter
 import com.linn.inventory.R
 import com.linn.inventory.data.Item
 import com.linn.inventory.ui.AppViewModelProvider
-import com.linn.inventory.ui.navigation.InventoryTopAppBar
 import com.linn.inventory.ui.navigation.NavigationDestination
 import com.linn.inventory.ui.theme.InventoryTheme
 import kotlinx.coroutines.launch
@@ -68,7 +67,7 @@ object ItemDetailsDestination : NavigationDestination {
     val routeWithArgs = "$route/{$ITEM_ID_ARG}"
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun ItemDetailsScreen(
     navigateToEditItem: (Int) -> Unit,
@@ -80,13 +79,6 @@ fun ItemDetailsScreen(
     val coroutineScope = rememberCoroutineScope()
 
     Scaffold(
-        topBar = {
-            InventoryTopAppBar(
-                title = stringResource(ItemDetailsDestination.titleRes),
-                canNavigateBack = true,
-                navigateUp = navigateBack
-            )
-        },
         modifier = modifier,
         bottomBar = {
             Button(
@@ -99,7 +91,7 @@ fun ItemDetailsScreen(
                 Text(stringResource(R.string.back_button))
             }
         }
-    ) { innerPadding ->
+    ) {
         ItemDetailsBody(
             itemDetails = itemUiState.itemDetails,
             onDelete = {
@@ -110,7 +102,6 @@ fun ItemDetailsScreen(
             },
             onEditClick = { navigateToEditItem(it) },
             modifier = Modifier
-                .padding(innerPadding)
                 .verticalScroll(rememberScrollState())
         )
     }
