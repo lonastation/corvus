@@ -210,13 +210,6 @@ fun ItemDetails(
                     horizontal = dimensionResource(id = R.dimen.padding_medium)
                 )
             )
-            ItemDetailsRow(
-                labelResID = R.string.item_content,
-                itemDetail = item.content,
-                modifier = Modifier.padding(
-                    horizontal = dimensionResource(id = R.dimen.padding_medium)
-                )
-            )
         }
     }
 }

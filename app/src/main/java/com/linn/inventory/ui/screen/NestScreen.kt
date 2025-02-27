@@ -160,7 +160,7 @@ private fun InventoryItem(
                     contentScale = ContentScale.Crop
                 )
             }
-            
+
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -196,9 +196,9 @@ private fun InventoryItem(
 fun NestBodyPreview() {
     InventoryTheme {
         NestBody(listOf(
-            Item(1, "外套", "", 20, "", ""),
-            Item(2, "短裤", "",  30, "", ""),
-            Item(3, "T恤", "",  50, "", "")
+            Item(1, "外套", "", 20, ""),
+            Item(2, "短裤", "", 30, ""),
+            Item(3, "T恤", "", 50, "")
         ), onItemClick = {})
     }
 }
@@ -216,7 +216,7 @@ fun NestBodyEmptyListPreview() {
 fun InventoryItemPreview() {
     InventoryTheme {
         InventoryItem(
-            Item(1, "外套", "Game", 20, "", "")
+            Item(1, "外套", "Game", 20, "")
         )
     }
 }

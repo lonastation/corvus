@@ -23,7 +23,6 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.linn.inventory.InventoryApplication
-import com.linn.inventory.ui.screen.HomeViewModel
 import com.linn.inventory.ui.item.ItemDetailsViewModel
 import com.linn.inventory.ui.item.ItemEditViewModel
 import com.linn.inventory.ui.item.ItemEntryViewModel
@@ -52,11 +51,6 @@ object AppViewModelProvider {
                 this.createSavedStateHandle(),
                 inventoryApplication().container.itemsRepository
             )
-        }
-
-        // Initializer for HomeViewModel
-        initializer {
-            HomeViewModel(inventoryApplication().container.itemsRepository)
         }
 
         initializer {

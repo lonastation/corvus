@@ -12,7 +12,6 @@ data class ItemDetails(
     val name: String = "",
     val type: String = "",
     val quantity: String = "",
-    val content: String = "",
     val photo: String = ""
 )
 
@@ -21,7 +20,6 @@ fun Item.toItemDetails() = ItemDetails(
     name = name,
     type = type,
     quantity = quantity.toString(),
-    content = content,
     photo = photo
 )
 
@@ -30,6 +28,5 @@ fun ItemDetails.toItem(): Item = Item(
     name = name,
     type = type,
     quantity = quantity.toIntOrNull() ?: 1,
-    content = content,
     photo = photo
 )
