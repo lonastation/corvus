@@ -14,12 +14,12 @@
   ~ limitations under the License.
   -->
 <resources>
-    <string name="app_name">Inventory</string>
+    <string name="app_name">Corvus</string>
     <string name="attention">Attention</string>
     <string name="back_button">Back</string>
     <string name="delete">Delete</string>
     <string name="delete_question">Are you sure you want to delete?</string>
-    <string name="no_item_description">Oops!\nNo items in the inventory.\nTap + to add.</string>
+    <string name="no_item_description">Oops!\nNo items found.\nTap + to add.</string>
     <string name="edit_item_title">Edit Item</string>
     <string name="item">Item</string>
     <string name="item_detail_title">Item Details</string>
@@ -28,13 +28,12 @@
     <string name="item_type_req">Item Type*</string>
     <string name="no">No</string>
     <string name="type">Type</string>
-    <string name="quantity_in_stock">Quantity in stock</string>
+    <string name="quantity_in_stock">Quantity</string>
     <string name="in_stock">%d in stock</string>
-    <string name="quantity_req">Quantity in Stock*</string>
+    <string name="quantity_req">Quantity*</string>
     <string name="save_action">Save</string>
     <string name="sell">Sell</string>
     <string name="yes">Yes</string>
-    <string name="add_photo">Add Photo</string>
     <string name="no_image_available">No Photo</string>
     <string name="choose_photo">Choose Photo</string>
     <string name="take_photo">Take Photo</string>

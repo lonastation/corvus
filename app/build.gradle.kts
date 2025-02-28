@@ -25,7 +25,7 @@ android {
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.linn.inventory"
+        applicationId = "com.linn.corvus"
         minSdk = 35
         targetSdk = 35
         versionCode = 1
@@ -64,7 +64,7 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
-    namespace = "com.linn.inventory"
+    namespace = "com.linn.corvus"
 }
 
 dependencies {
