@@ -4,26 +4,35 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.outlined.Category
+import androidx.compose.material.icons.outlined.Widgets
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -81,10 +90,32 @@ fun NestScreen(
 private fun NestBody(
     itemList: List<Item>, onItemClick: (Int) -> Unit, modifier: Modifier = Modifier
 ) {
+    var isListView by remember { mutableStateOf(true) }
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
     ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(dimensionResource(id = R.dimen.padding_small)),
+            horizontalArrangement = Arrangement.End
+        ) {
+            IconButton(
+                onClick = { isListView = !isListView },
+                modifier = Modifier.padding(horizontal = 8.dp)
+            ) {
+                Icon(
+                    imageVector = if (isListView) Icons.Outlined.Widgets else Icons.Outlined.Category,
+                    contentDescription = if (isListView) 
+                        stringResource(R.string.grouped_view) 
+                    else stringResource(R.string.list_view),
+                    tint = MaterialTheme.colorScheme.primary
+                )
+            }
+        }
+
         if (itemList.isEmpty()) {
             Text(
                 text = stringResource(R.string.no_item_description),
@@ -92,11 +123,19 @@ private fun NestBody(
                 style = MaterialTheme.typography.titleLarge
             )
         } else {
-            InventoryList(
-                itemList = itemList,
-                onItemClick = { onItemClick(it.id) },
-                modifier = Modifier.padding(horizontal = dimensionResource(id = R.dimen.padding_small))
-            )
+            if (isListView) {
+                InventoryList(
+                    itemList = itemList,
+                    onItemClick = { onItemClick(it.id) },
+                    modifier = Modifier.padding(horizontal = dimensionResource(id = R.dimen.padding_small))
+                )
+            } else {
+                GroupedInventoryList(
+                    itemList = itemList,
+                    onItemClick = { onItemClick(it.id) },
+                    modifier = Modifier.padding(horizontal = dimensionResource(id = R.dimen.padding_small))
+                )
+            }
         }
     }
 }
@@ -121,6 +160,47 @@ private fun InventoryList(
                     .padding(dimensionResource(id = R.dimen.padding_small))
                     .clickable { onItemClick(itemList[index]) }
             )
+        }
+    }
+}
+
+@Composable
+private fun GroupedInventoryList(
+    itemList: List<Item>,
+    onItemClick: (Item) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val groupedItems = itemList.groupBy { it.type }
+    
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(2),
+        modifier = modifier
+    ) {
+        groupedItems.forEach { (type, items) ->
+            item(span = { GridItemSpan(2) }) {
+                Text(
+                    text = type,
+                    style = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(
+                            top = dimensionResource(id = R.dimen.padding_medium),
+                            bottom = dimensionResource(id = R.dimen.padding_small)
+                        )
+                )
+            }
+            
+            items(
+                count = items.size,
+                key = { items[it].id }
+            ) { index ->
+                InventoryItem(
+                    item = items[index],
+                    modifier = Modifier
+                        .padding(dimensionResource(id = R.dimen.padding_small))
+                        .clickable { onItemClick(items[index]) }
+                )
+            }
         }
     }
 }
@@ -196,9 +276,9 @@ private fun InventoryItem(
 fun NestBodyPreview() {
     InventoryTheme {
         NestBody(listOf(
-            Item(1, "外套", "", 20, ""),
-            Item(2, "短裤", "", 30, ""),
-            Item(3, "T恤", "", 50, "")
+            Item(1, "A", "", 20, ""),
+            Item(2, "B", "", 30, ""),
+            Item(3, "T", "", 50, "")
         ), onItemClick = {})
     }
 }
