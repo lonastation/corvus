@@ -21,7 +21,7 @@ abstract class CorvusDatabase : RoomDatabase() {
         private var Instance: CorvusDatabase? = null
 
         fun getDatabase(context: Context): CorvusDatabase {
-            val migrationFrom2To3 = object : Migration(1, 2) {
+            val migrationFrom2To3 = object : Migration(2, 3) {
                 override fun migrate(db: SupportSQLiteDatabase) {
                     db.execSQL("ALTER TABLE items RENAME COLUMN color TO type")
                     db.execSQL("ALTER TABLE items RENAME COLUMN photoPath TO photo")
